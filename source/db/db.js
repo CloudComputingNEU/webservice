@@ -24,8 +24,12 @@ async function initialize() {
     let mysqlConfig = JSON.parse(rawdata);
     await mysql.createConnection({  host: mysqlConfig.dbHost,
       user: mysqlConfig.dbUser,
-      password: mysqlConfig.dbPass}).then(connection => connection.query(`CREATE DATABASE IF NOT EXISTS \`${DATABASE}\`;`))
-      .then(data => console.log('queried')).catch(data => console.log("failed"));
+      password: mysqlConfig.dbPass,
+    ssl:{
+      ca:fs.readFileSync("/tmp/us-east-1-bundle.pem")
+    }}).then(connection => {connection.query(`CREATE DATABASE IF NOT EXISTS \`${DATABASE}\`;`);return connection})
+    .then(connection => connection.query(`select * from status`))
+      .then(data => {console.log({'queried status result:':JSON.stringify(data)});}).catch(data => console.log({"failed reason":data}));
 
     // connect to db
     const sequelize = new Sequelize(DATABASE, mysqlConfig.dbUser, mysqlConfig.dbPass, { host:mysqlConfig.dbHost,dialect: 'mysql' });
