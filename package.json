@@ -9,7 +9,7 @@
     "zip": "sh createzip.sh"
   },
   "dependencies": {
-    "aws-sdk": "^2.1087.0",
+    "aws-sdk": "^2.1322.0",
     "basic-auth": "^2.0.1",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.2",
